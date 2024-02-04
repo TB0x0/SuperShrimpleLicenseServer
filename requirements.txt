@@ -1,0 +1,4 @@
+#SSLS v1.0 Requirements
+
+Flask==3.0.2
+
