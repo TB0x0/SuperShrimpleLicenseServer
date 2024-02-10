@@ -1,5 +1,0 @@
-#SSLS v1.0 Requirements
-
-Flask==3.0.2
-flask_mysqldb==2.0.0
-mysqlclient==2.2.3
