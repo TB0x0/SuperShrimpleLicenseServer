@@ -1,0 +1,20 @@
+{
+  "name": "SuperShrimpleLicenseServer",
+  "version": "1.0.0",
+  "description": "A secure simple licensing server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TB0x0/SuperShrimpleLicenseServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TB0x0/SuperShrimpleLicenseServer/issues"
+  },
+  "homepage": "https://github.com/TB0x0/SuperShrimpleLicenseServer#readme"
+}
