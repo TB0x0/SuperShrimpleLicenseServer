@@ -2,87 +2,90 @@
 
 // Imports
 const express = require('express');
-const mysql = require('mysql');
+const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Parse incoming json requests
+// Connection URL and Database Name
+const url = 'mongodb://localhost:27017'; // Mongo server IP:Port
+const dbName = 'SSLS-Licenses'; // Mongo database name
+
+// Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// MySQL DB Implementation
-const dbConfig = {
-	host: '',
-	user: '',
-	password: '',
-	database: '',
-};
+// MongoDB Connection
+let client;
 
-// MySQL connection pool
-const pool = mysql.createPool(dbConfig);
+// Connect to MongoDB
+MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((connectedClient) => {
+    console.log('Connected to MongoDB');
+    client = connectedClient;
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1); // Terminate the application if unable to connect to MongoDB
+  });
 
-// API Endpoints
+// API endpoints
+  
+// License generation endpoints
+app.post('/api/generate', async (req, res) => {
+  try {
+    // Extract license information from the request body
+    const { key, product, expirationDate } = req.body;
 
-// License creation endpoint
-app.post('/api/generate', (req, res) => {
-	
-	// Extract license fields
-	const { key, product, expiration } = req.body;
-
-	// Input validation
-	if (!key || !product || !expirationDate) {
-		return res.status(400).json({error: 'Invalid input'});
+    // Validate input
+    if (!key || !product || !expirationDate) {
+      return res.status(400).json({ error: 'Invalid input.' });
     }
-    
-    // Insert into database
-    const insertQuery = 'INSERT INTO licenses (key, product, expiration)'
-    const values = [key, product, expiration];
-    
-    pool.query(insertQuery, values, (error, results) => {
-        if (error) {
-            console.error('Error adding license to database:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        
-        // If no error respond with success
-        res.status(201).json({ message: 'License added successfully.' });
-    });
+
+    // Get the MongoDB database
+    const db = client.db(dbName);
+
+    // Insert license information into the 'licenses' collection
+    const result = await db.collection('licenses').insertOne({ key, product, expirationDate });
+
+    // Respond with success message
+    res.status(201).json({ message: 'License successfully added.', insertedId: result.insertedId });
+  } catch (error) {
+    console.error('Error inserting license:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-// License verification endpoint
-app.get('/api/licenses/:key', (req, res) => {
-	
-	// Extract key
-	const { key } = req.params;
+// API endpoint to retrieve a license by key
+app.get('/api/licenses/:key', async (req, res) => {
+  try {
+    // Extract the license key from the request parameters
+    const { key } = req.params;
 
-	// Input validation
-	if (!key) {
-		return res.status(400).json({error: 'Invalid input'});
+    // Validate input
+    if (!key) {
+      return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
     }
-		
-    // Insert into database
-    const selectQuery = 'SELECT * FROM licenses WHERE `key` = ?';
-    const values = [key];
-    
-    pool.query(insertQuery, values, (error, results) => {
-        if (error) {
-            console.error('Error verifying license:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        
-        // Verify if license key was in database
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'License not found.'  });
-            }
-            
-        // If no error respond license
-        res.status(200).json({ key: license.key, product: license.product, expiration: license.expiration});
-    });
+
+    // Get the MongoDB database
+    const db = client.db(dbName);
+
+    // Query the 'licenses' collection to retrieve the license by key
+    const license = await db.collection('licenses').findOne({ key });
+
+    // Check if the license key was found in the database
+    if (!license) {
+      return res.status(404).json({ error: 'License not found.' });
+    }
+
+    // Respond with license information
+    res.status(200).json({ key: license.key, product: license.product, expirationDate: license.expirationDate });
+  } catch (error) {
+    console.error('Error retrieving license:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-
-// Listen for incoming connections on port 3000
-const PORT = process.env.PORT || 3000;
+// Start the Express server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
