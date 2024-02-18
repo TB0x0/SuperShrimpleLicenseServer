@@ -2,8 +2,17 @@
 
 ## A secure simple licensing server 
 
-### Setup instructions
+### This is a work in progress. 
 
-1. Install mongodb
-    sudo apt install mongodb
+Currently setting up api endpoints
+
+TODO:
+
+Complete api endpoints
+Build out database infrastructure
+Secure API endpoints 
+Hash licenses
+Containerize server for easier setup
+
+
 

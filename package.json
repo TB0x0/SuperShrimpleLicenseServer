@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/TB0x0/SuperShrimpleLicenseServer/issues"
   },
-  "homepage": "https://github.com/TB0x0/SuperShrimpleLicenseServer#readme"
+  "homepage": "https://github.com/TB0x0/SuperShrimpleLicenseServer#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongod": "^2.0.0",
+    "mongodb": "^6.3.0"
+  }
 }
