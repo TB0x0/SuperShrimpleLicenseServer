@@ -5,6 +5,8 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const models = require('./models')
 
+require("dotenv").config()
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -38,7 +40,7 @@ let pool;
 // License generation endpoints
 app.post('/api/generatelicense', async (req, res) => {
     try {
-        res.send('Hit license generation api')
+        console.log(req.body)
         // Extract license information from the request body
         const { license, product, expirationDate } = req.body;
 
@@ -48,7 +50,7 @@ app.post('/api/generatelicense', async (req, res) => {
         }
 
         // Insert license information into the 'licenses' table
-        const insertedId = models.addLicense(license, product, expirationDate);
+        const insertedId = models.Licenses.addLicense(license, product, expirationDate, pool);
 
         // Respond with success message
         res.status(201).json({ message: 'License successfully added.', insertedId });

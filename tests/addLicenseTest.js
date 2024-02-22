@@ -3,12 +3,12 @@
 const axios = require('axios');
 
 const requestData = {
-    key: '0000_00000',
+    license: '1234jjh',
     product: 'test_product_name',
     expirationDate: '2024-12-31'
 };
 
-axios.post('http://localhost:3000/api/generate', requestData)
+axios.post('http://localhost:3000/api/generateLicense', requestData)
     .then(response => {
         console.log('Response:', response.data);
     })
