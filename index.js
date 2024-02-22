@@ -38,16 +38,17 @@ let pool;
 // License generation endpoints
 app.post('/api/generatelicense', async (req, res) => {
     try {
+        res.send('Hit license generation api')
         // Extract license information from the request body
-        const { key, product, expirationDate } = req.body;
+        const { license, product, expirationDate } = req.body;
 
         // Validate input
-        if (!key || !product || !expirationDate) {
+        if (!license || !product || !expirationDate) {
             return res.status(400).json({ error: 'Invalid input.' });
         }
 
         // Insert license information into the 'licenses' table
-        const insertedId = models.addLicense(key, license, expirationDate);
+        const insertedId = models.addLicense(license, product, expirationDate);
 
         // Respond with success message
         res.status(201).json({ message: 'License successfully added.', insertedId });
