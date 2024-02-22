@@ -3,6 +3,7 @@
 // Imports
 const express = require('express');
 const mysql = require('mysql2/promise');
+const models = require('./models')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,7 +36,7 @@ let pool;
 // API endpoints
 
 // License generation endpoints
-app.post('/api/generate', async (req, res) => {
+app.post('/api/generatelicense', async (req, res) => {
     try {
         // Extract license information from the request body
         const { key, product, expirationDate } = req.body;
@@ -46,10 +47,10 @@ app.post('/api/generate', async (req, res) => {
         }
 
         // Insert license information into the 'licenses' table
-        const [result] = await pool.query('INSERT INTO licenses (key, product, expirationDate) VALUES (?, ?, ?)', [key, product, expirationDate]);
+        const insertedId = models.addLicense(key, license, expirationDate);
 
         // Respond with success message
-        res.status(201).json({ message: 'License successfully added.', insertedId: result.insertId });
+        res.status(201).json({ message: 'License successfully added.', insertedId });
     } catch (error) {
         console.error('Error inserting license:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -68,15 +69,15 @@ app.get('/api/licenses/:key', async (req, res) => {
         }
 
         // Query the 'licenses' table to retrieve the license by key
-        const [license] = await pool.query('SELECT * FROM licenses WHERE key = ?', [key]);
+        const retrievedLicense = models.getLicenseByKey(key);
 
         // Check if the license key was found in the database
-        if (license.length === 0) {
+        if (retrievedLicense.length === 0) {
             return res.status(404).json({ error: 'License not found.' });
         }
 
         // Respond with license information
-        res.status(200).json({ key: license[0].key, product: license[0].product, expirationDate: license[0].expirationDate });
+        res.status(200).json({ key: retrievedLicense[0].key, product: retrievedLicense[0].product, expirationDate: retrievedLicense[0].expirationDate });
     } catch (error) {
         console.error('Error retrieving license:', error);
         res.status(500).json({ error: 'Internal Server Error' });
