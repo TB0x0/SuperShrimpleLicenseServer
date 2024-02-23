@@ -6,6 +6,9 @@
 #Ignore all log files
 *.log
 
+#Ignore the git stuff
+*.git
+
 #Ignore node modules (Since package.json will take care of that)
 node_modules/
 

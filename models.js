@@ -9,9 +9,9 @@ const Licenses = {
         return result.insertId;
     },
 
-    async getLicenseByKey(key, pool) {
-        const [license] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
-        return license[0];
+    async getLicenseByKey(license, pool) {
+        const [retLicense] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
+        return retLicense[0];
     }
 };
 
