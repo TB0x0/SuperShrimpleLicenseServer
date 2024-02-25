@@ -18,7 +18,10 @@ Containerize server for easier setup
 
 Install MySQL 8.0
 
+Create ssls_connection user in mysql and set password. Ensure .env is set to these values.
+
 Run sql scripts from the utilities directory to create schema and tables
 
+Run the add license and check license test scripts (in order) to verify everything is working.
 
 
