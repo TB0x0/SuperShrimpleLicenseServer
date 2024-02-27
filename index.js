@@ -63,16 +63,17 @@ app.post('/api/generatelicense', async (req, res) => {
 // API endpoint to retrieve a license by key
 app.get('/api/licenses/:license', async (req, res) => {
     try {
+        console.log("Entered Try")
         // Extract the license key from the request parameters
-        const { license } = req.params;
+        const paramLicense  = req.params.license;
 
         // Validate input
-        if (!license) {
+        if (!paramLicense) {
             return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
         }
 
         // Query the 'licenses' table to retrieve the license by key
-        const retrievedLicense = models.Licenses.getLicenseByKey(license, pool);
+        const retrievedLicense = new Array(models.Licenses.getLicenseByKey(paramLicense, pool));
 
         // Check if the license key was found in the database
         if (retrievedLicense.length === 0) {
@@ -80,6 +81,7 @@ app.get('/api/licenses/:license', async (req, res) => {
         }
 
         // Respond with license information
+        console.log("Valid license retrieved")
         res.status(200).json({ license: retrievedLicense[0].license, product: retrievedLicense[0].product, expirationDate: retrievedLicense[0].expirationDate });
     } catch (error) {
         console.error('Error retrieving license:', error);
