@@ -11,7 +11,7 @@ const Licenses = {
 
     async getLicenseByKey(license, pool) {
         const [retLicense] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
-        return retLicense[0];
+        return retLicense;
     }
 };
 

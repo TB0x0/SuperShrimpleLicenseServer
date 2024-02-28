@@ -37,7 +37,7 @@ let pool;
 
 // API endpoints
 
-// License generation endpoints
+// License generation endpoint
 app.post('/api/generatelicense', async (req, res) => {
     try {
         console.log(req.body)
@@ -50,20 +50,53 @@ app.post('/api/generatelicense', async (req, res) => {
         }
 
         // Insert license information into the 'licenses' table
-        const insertedId = models.Licenses.addLicense(license, product, expirationDate, pool);
-
-        // Respond with success message
-        res.status(201).json({ message: 'License successfully added.', insertedId });
+        if (!models.Licenses.getLicenseByKey(license, pool)) {
+            const insertedId = models.Licenses.addLicense(license, product, expirationDate, pool);
+            // Respond with success message
+            res.status(201).json({ message: 'License successfully added.', insertedId });
+        }
+        else {
+            console.error('License already exists');
+            return res.status(400).json({ error: 'License already exists.' });
+        }
     } catch (error) {
         console.error('Error inserting license:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// API endpoint to retrieve a license by key
+// License removal endpoint
+app.post('/api/removelicense/:license', async (req, res) => {
+    try {
+        console.log("Removal API accessed.")
+        // Extract the license key from the request parameters
+        const paramLicense = req.params.license;
+
+        // Validate input
+        if (!paramLicense) {
+            return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
+        }
+
+        if (models.Licenses.getLicenseByKey(paramLicense, pool)) {
+            
+            // Respond with success message
+            res.status(201).json({ message: 'License successfully removed.', removedId });
+        }
+        else {
+            console.error('License does not exist');
+            return res.status(400).json({ error: 'License does not exist.' });
+        }
+
+    }
+    catch (error) {
+        console.error('Error removing license:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// License retrieval endpoint - by key
 app.get('/api/licenses/:license', async (req, res) => {
     try {
-        console.log("Entered Try")
         // Extract the license key from the request parameters
         const paramLicense  = req.params.license;
 
@@ -73,7 +106,7 @@ app.get('/api/licenses/:license', async (req, res) => {
         }
 
         // Query the 'licenses' table to retrieve the license by key
-        const retrievedLicense = new Array(models.Licenses.getLicenseByKey(paramLicense, pool));
+        const retrievedLicense = await models.Licenses.getLicenseByKey(paramLicense, pool);
 
         // Check if the license key was found in the database
         if (retrievedLicense.length === 0) {
@@ -82,7 +115,9 @@ app.get('/api/licenses/:license', async (req, res) => {
 
         // Respond with license information
         console.log("Valid license retrieved")
-        res.status(200).json({ license: retrievedLicense[0].license, product: retrievedLicense[0].product, expirationDate: retrievedLicense[0].expirationDate });
+        res.status(200).json({
+            licenseData: retrievedLicense,
+        });
     } catch (error) {
         console.error('Error retrieving license:', error);
         res.status(500).json({ error: 'Internal Server Error' });
