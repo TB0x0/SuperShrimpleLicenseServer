@@ -77,10 +77,11 @@ app.post('/api/removelicense/:license', async (req, res) => {
             return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
         }
 
-        if (models.Licenses.getLicenseByKey(paramLicense, pool)) {
-            
+        const removeId = models.Licenses.removeLicenseByKey(paramLicense, pool);
+
+        if (removeId) {
             // Respond with success message
-            res.status(201).json({ message: 'License successfully removed.', removedId });
+            res.status(201).json({ message: 'License successfully removed.', removeId });
         }
         else {
             console.error('License does not exist');

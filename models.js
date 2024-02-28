@@ -9,6 +9,11 @@ const Licenses = {
         return result.insertId;
     },
 
+    async removeLicenseByKey(license, pool) {
+        const [result] = await pool.query('DELETE FROM licenses WHERE license = ?', [license]);
+        return result;
+    },
+
     async getLicenseByKey(license, pool) {
         const [retLicense] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
         return retLicense;
