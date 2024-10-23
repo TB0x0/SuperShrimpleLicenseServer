@@ -1,12 +1,10 @@
 // TB0x0 SSLS 2024
 
-const mysql = require('mysql2/promise');
-
 // Licenses Model
 const Licenses = {
     async addLicense(license, product, expirationDate, pool) {
         const [result] = await pool.query('INSERT INTO licenses (license, product, expirationDate) VALUES (?, ?, ?)', [license, product, expirationDate]);
-        return result.insertId;
+        return result;
     },
 
     async removeLicenseByKey(license, pool) {
@@ -15,8 +13,8 @@ const Licenses = {
     },
 
     async getLicenseByKey(license, pool) {
-        const [retLicense] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
-        return retLicense;
+        const [result] = await pool.query('SELECT * FROM licenses WHERE license = ?', [license]);
+        return result;
     }
 };
 

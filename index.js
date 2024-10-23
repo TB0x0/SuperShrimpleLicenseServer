@@ -40,7 +40,7 @@ let pool;
 // License generation endpoint
 app.post('/api/generatelicense', async (req, res) => {
     try {
-        console.log(req.body)
+        //Debug: console.log(req.body)
         // Extract license information from the request body
         const { license, product, expirationDate } = req.body;
 
@@ -48,9 +48,10 @@ app.post('/api/generatelicense', async (req, res) => {
         if (!license || !product || !expirationDate) {
             return res.status(400).json({ error: 'Invalid input.' });
         }
-
+        let licenseCheck = await models.Licenses.getLicenseByKey(license, pool)
+        console.log(licenseCheck)
         // Insert license information into the 'licenses' table
-        if (!models.Licenses.getLicenseByKey(license, pool)) {
+        if (licenseCheck.length === 0) { // if the promise returns an empty array its len will be 0. Simple check to make sure license doesn't exist.
             const insertedId = models.Licenses.addLicense(license, product, expirationDate, pool);
             // Respond with success message
             res.status(201).json({ message: 'License successfully added.', insertedId });
@@ -68,19 +69,20 @@ app.post('/api/generatelicense', async (req, res) => {
 // License removal endpoint
 app.post('/api/removelicense/:license', async (req, res) => {
     try {
-        console.log("Removal API accessed.")
+        console.log("Removal API accessed. License: ", req.params.license)
         // Extract the license key from the request parameters
-        const paramLicense = req.params.license;
 
         // Validate input
-        if (!paramLicense) {
+        if (!req.params.license) {
+            console.log('Invalid input. Please provide a license key.')
             return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
         }
 
-        const removeId = models.Licenses.removeLicenseByKey(paramLicense, pool);
+        const removeId = models.Licenses.removeLicenseByKey(req.params.license, pool);
 
-        if (removeId) {
+        if (removeId != null) {
             // Respond with success message
+            console.log('License successfully removed.')
             res.status(201).json({ message: 'License successfully removed.', removeId });
         }
         else {

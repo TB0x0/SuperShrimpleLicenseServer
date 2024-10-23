@@ -3,7 +3,7 @@
 const axios = require('axios');
 
 const requestData = {
-    license: '1234jjh',
+    license: '1234Test3',
     product: 'test_product_name',
     expirationDate: '2024-12-31'
 };
