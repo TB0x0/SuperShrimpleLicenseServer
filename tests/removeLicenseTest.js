@@ -12,7 +12,7 @@ axios.post('http://localhost:3000/api/removelicense/randomshi')
     });
 
 // Test license removal
-axios.post('http://localhost:3000/api/removelicense/1234jjh')
+axios.post('http://localhost:3000/api/removelicense/1234Test1')
     .then(response => {
         console.log('Response:', response.data);
     })

@@ -21,7 +21,7 @@ const dbConfig = {
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
-// MySQL Connection
+// Ensure the pool is accessible from the api endpoints (not sure if this is good code)
 let pool;
 
 // Connect to MySQL
@@ -37,7 +37,7 @@ let pool;
 
 // API endpoints
 
-// License generation endpoint
+// License generation endpoint <COMPLETE>
 app.post('/api/generatelicense', async (req, res) => {
     try {
         //Debug: console.log(req.body)
@@ -66,7 +66,7 @@ app.post('/api/generatelicense', async (req, res) => {
     }
 });
 
-// License removal endpoint
+// License removal endpoint <COMPLETE>
 app.post('/api/removelicense/:license', async (req, res) => {
     try {
         console.log("Removal API accessed. License: ", req.params.license)
@@ -78,9 +78,9 @@ app.post('/api/removelicense/:license', async (req, res) => {
             return res.status(400).json({ error: 'Invalid input. Please provide a license key.' });
         }
 
-        const removeId = models.Licenses.removeLicenseByKey(req.params.license, pool);
+        const removeId = await models.Licenses.removeLicenseByKey(req.params.license, pool);
 
-        if (removeId != null) {
+        if (removeId.affectedRows != 0) {
             // Respond with success message
             console.log('License successfully removed.')
             res.status(201).json({ message: 'License successfully removed.', removeId });
