@@ -3,23 +3,26 @@
 const axios = require('axios');
 
 // Test License Generation
-async function sendRequests() {
+function sendRequests() {
     const requestData = {
-        license: '1234jjh',
+        license: '1234jAh',
         product: 'test_product_name',
         expirationDate: '2024-12-31'
     };
 
     const request1 = axios.post('http://localhost:3000/api/generateLicense', requestData);
-    const request2 = axios.get('http://localhost:3000/api/licenses/1234jjh');
-    const request3 = axios.post('http://localhost:3000/api/removelicense/1234jjh');
+    const request2 = axios.get('http://localhost:3000/api/licenses/1234jAh');
+    const request3 = axios.post('http://localhost:3000/api/removelicense/1234jAh');
 
-    // Run requests concurrently
-    await axios.all([request1, request2, request3]).then(axios.spread(function (res1, res2, res3) {
-        console.log(res1.data);
-        console.log(res2.data);
-        console.log(res3.data);
-    }));
+    // Run requests sequentially
+    request1.then(response1 => {
+        console.log('Unit Test 1: License Generation....Sent');
+        return request2;
+    })
+    .then(response2 => {
+        console.log('Unit Test 2: License Existence Check.....Sent');
+    })
+    
 }
 
 sendRequests();

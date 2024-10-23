@@ -97,7 +97,7 @@ app.post('/api/removelicense/:license', async (req, res) => {
     }
 });
 
-// License retrieval endpoint - by key
+// License retrieval endpoint - by key <COMPLETE>
 app.get('/api/licenses/:license', async (req, res) => {
     try {
         // Extract the license key from the request parameters
@@ -113,14 +113,17 @@ app.get('/api/licenses/:license', async (req, res) => {
 
         // Check if the license key was found in the database
         if (retrievedLicense.length === 0) {
-            return res.status(404).json({ error: 'License not found.' });
-        }
-
-        // Respond with license information
-        console.log("Valid license retrieved")
-        res.status(200).json({
+            console.log(paramLicense, ', License not Found.')
+            return res.status(404).json({ error: 'License not found' });
+        }else {
+            // Respond with license information
+            console.log(paramLicense, ", Valid license(s) retrieved: ", retrievedLicense.length)
+            res.status(200).json({
             licenseData: retrievedLicense,
-        });
+            });
+            }
+
+        
     } catch (error) {
         console.error('Error retrieving license:', error);
         res.status(500).json({ error: 'Internal Server Error' });

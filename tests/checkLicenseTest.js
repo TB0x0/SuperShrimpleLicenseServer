@@ -25,7 +25,7 @@ axios.get('http://localhost:3000/api/licenses/randomlicense123')
     });
 
 // Test an existing license
-axios.get('http://localhost:3000/api/licenses/1234jjh')
+axios.get('http://localhost:3000/api/licenses/1234jAh')
     .then(response => {
         console.log('Response:', response.data);
     })
