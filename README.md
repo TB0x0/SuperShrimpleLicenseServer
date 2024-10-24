@@ -8,7 +8,7 @@ Currently setting up api endpoints
 
 TODO:
 
-Complete api endpoints
+[-] Complete api endpoints
 Build out database infrastructure
 Secure API endpoints 
 Hash licenses

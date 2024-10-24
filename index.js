@@ -50,7 +50,8 @@ app.post('/api/generatelicense', async (req, res) => {
             return res.status(400).json({ error: 'Invalid input.' });
         }
         let licenseCheck = await models.Licenses.getLicenseByKey(license, pool)
-        console.log(licenseCheck)
+        //Debug: console.log(licenseCheck)
+        
         // Insert license information into the 'licenses' table
         if (licenseCheck.length === 0) { // if the promise returns an empty array its len will be 0. Simple check to make sure license doesn't exist.
             const insertedId = models.Licenses.addLicense(license, product, expirationDate, pool);
