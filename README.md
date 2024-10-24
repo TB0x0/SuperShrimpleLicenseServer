@@ -6,15 +6,15 @@
 
 TODO:
 
-[x] Complete api endpoints
+- [x] Complete api endpoints
 
-[ ] Build out database infrastructure
+- [ ] Build out database infrastructure
 
-[ ] Secure API endpoints 
+- [ ] Secure API endpoints 
 
-[ ] Hash licenses
+- [ ] Hash licenses
 
-[ ] Containerize server for easier setup
+- [ ] Containerize server for easier setup
 
 ## Requirements
 
