@@ -3,7 +3,7 @@
 const axios = require('axios');
 
 // Test non existent license
-axios.post('http://localhost:3000/api/removelicense/randomshi')
+axios.post('http://localhost:3000/api/removelicense/TestLicense1')
     .then(response => {
         console.log('Response:', response.data);
     })

@@ -28,7 +28,8 @@ let pool;
 (async () => {
     try {
         pool = await mysql.createPool(dbConfig);
-        console.log('Connected to MySQL');
+        console.log('MySQL Connection Successful......');
+        console.log('---API Access is Ready---')
     } catch (error) {
         console.error('Error connecting to MySQL:', error);
         process.exit(1); // Terminate the application if unable to connect to MySQL
@@ -132,5 +133,9 @@ app.get('/api/licenses/:license', async (req, res) => {
 
 // Start the Express server
 app.listen(PORT, () => {
+    console.log('-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-');
+    console.log('-_-_-_- WELCOME TO SSLS -_-_-_-');
+    console.log('-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-');
+    console.log('Server Starting......');
     console.log(`Server is running on http://localhost:${PORT}`);
 });

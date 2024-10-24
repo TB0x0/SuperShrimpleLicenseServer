@@ -2,10 +2,6 @@
 
 const axios = require('axios');
 
-const requestData = {
-    key: '1234jjh'
-};
-
 // Test no license given
 axios.get('http://localhost:3000/api/licenses/')
     .then(response => {
