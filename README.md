@@ -6,7 +6,7 @@
 
 TODO:
 
-[ ] Complete api endpoints
+[x] Complete api endpoints
 
 [ ] Build out database infrastructure
 
