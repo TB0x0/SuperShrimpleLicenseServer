@@ -8,8 +8,6 @@ TODO:
 
 - [x] Complete api endpoints
 
-- [ ] Build out database infrastructure
-
 - [ ] Secure API endpoints 
 
 - [ ] Hash licenses
